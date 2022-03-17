@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use App\Repository\UsersRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 class Users
 {

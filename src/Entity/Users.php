@@ -30,6 +30,9 @@ class Users
     #[ORM\Column(type: 'string', length: 40)]
     private $phonenumber;
 
+    #[ORM\Column(type: 'date')]
+    private $birthDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +94,18 @@ class Users
     public function setPhonenumber(string $phonenumber): self
     {
         $this->phonenumber = $phonenumber;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(\DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
 
         return $this;
     }

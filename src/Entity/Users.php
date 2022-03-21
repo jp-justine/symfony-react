@@ -3,61 +3,108 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
-#[ApiResource]
+
+/**
+ * a user.
+ *
+ */
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
+#[ApiResource]
 class Users
 {
+    /**
+     *  user id.
+     *
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 40)]
-    private $name;
+    /**
+     *  frst name of the user.
+     *
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    private $firstName;
 
-    #[ORM\Column(type: 'string', length: 40)]
-    private $firstname;
+    /**
+     *   last name of the user.
+     *
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    private $lastName;
 
-    #[ORM\Column(type: 'string', length: 40)]
+    /**
+     *  email of the user.
+     *
+     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $mail;
 
-    #[ORM\Column(type: 'string', length: 40)]
-    private $adress;
+    /**
+     * address of the user.
+     *
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    private $address;
 
-    #[ORM\Column(type: 'string', length: 40)]
-    private $phonenumber;
+    /**
+     *  phone number of the user.
+     *
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    private $phoneNumber;
 
-    #[ORM\Column(type: 'date')]
+    /**
+     * bitrhday of the user.
+     *
+     */
+    #[ORM\Column(type: "datetime")]
     private $birthDate;
+
+    /**
+     *  owned objects for this user.
+     *
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UsersOwned::class)]
+    private $usersOwneds;
+
+    public function __construct()
+    {
+        $this->usersOwneds = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): self
+    public function setFirstName(string $firstName): self
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getLastName(): ?string
     {
-        return $this->firstname;
+        return $this->lastName;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setLastName(string $lastName): self
     {
-        $this->firstname = $firstname;
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -74,26 +121,26 @@ class Users
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adress;
+        return $this->address;
     }
 
-    public function setAdress(string $adress): self
+    public function setAddress(string $address): self
     {
-        $this->adress = $adress;
+        $this->address = $address;
 
         return $this;
     }
 
-    public function getPhonenumber(): ?string
+    public function getPhoneNumber(): ?string
     {
-        return $this->phonenumber;
+        return $this->phoneNumber;
     }
 
-    public function setPhonenumber(string $phonenumber): self
+    public function setPhoneNumber(string $phoneNumber): self
     {
-        $this->phonenumber = $phonenumber;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
@@ -106,6 +153,36 @@ class Users
     public function setBirthDate(\DateTimeInterface $birthDate): self
     {
         $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsersOwned>
+     */
+    public function getUsersOwneds(): Collection
+    {
+        return $this->usersOwneds;
+    }
+
+    public function addUsersOwned(UsersOwned $usersOwned): self
+    {
+        if (!$this->usersOwneds->contains($usersOwned)) {
+            $this->usersOwneds[] = $usersOwned;
+            $usersOwned->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsersOwned(UsersOwned $usersOwned): self
+    {
+        if ($this->usersOwneds->removeElement($usersOwned)) {
+            // set the owning side to null (unless already changed)
+            if ($usersOwned->getUser() === $this) {
+                $usersOwned->setUser(null);
+            }
+        }
 
         return $this;
     }

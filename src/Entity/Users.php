@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+// use App\Repository\UsersRepository;
+// use Doctrine\Common\Collections\ArrayCollection;
+// use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -31,6 +32,7 @@ class Users
      *
      */
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $firstName;
 
     /**
@@ -38,6 +40,7 @@ class Users
      *
      */
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $lastName;
 
     /**
@@ -45,6 +48,7 @@ class Users
      *
      */
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $mail;
 
     /**
@@ -52,6 +56,7 @@ class Users
      *
      */
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $address;
 
     /**
@@ -59,6 +64,7 @@ class Users
      *
      */
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $phoneNumber;
 
     /**
@@ -66,19 +72,21 @@ class Users
      *
      */
     #[ORM\Column(type: "datetime")]
+    #[Assert\NotNull]
     private $birthDate;
 
-    /**
-     *  owned objects for this user.
-     *
-     */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UsersOwned::class)]
-    private $usersOwneds;
+    // // /**
+    // //  *  items owned by this user.
+    // //  *
+    // //  */
+    // // #[ORM\OneToMany(mappedBy: 'Users', targetEntity: Items::class)]
+    // // private $ItemsOwner;
 
-    public function __construct()
-    {
-        $this->usersOwneds = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->itemsOwner = new ArrayCollection();
+    //     $this->ItemsOwner = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -157,33 +165,35 @@ class Users
         return $this;
     }
 
-    /**
-     * @return Collection<int, UsersOwned>
-     */
-    public function getUsersOwneds(): Collection
-    {
-        return $this->usersOwneds;
-    }
+    // /**
+    //  * @return Collection<int, Items>
+    //  */
+    // public function getItemsOwner(): Collection
+    // {
+    //     return $this->ItemsOwner;
+    // }
 
-    public function addUsersOwned(UsersOwned $usersOwned): self
-    {
-        if (!$this->usersOwneds->contains($usersOwned)) {
-            $this->usersOwneds[] = $usersOwned;
-            $usersOwned->setUser($this);
-        }
+    // public function addItemsOwner(Items $itemsOwner): self
+    // {
+    //     if (!$this->ItemsOwner->contains($itemsOwner)) {
+    //         $this->ItemsOwner[] = $itemsOwner;
+    //         $itemsOwner->setUser($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeUsersOwned(UsersOwned $usersOwned): self
-    {
-        if ($this->usersOwneds->removeElement($usersOwned)) {
-            // set the owning side to null (unless already changed)
-            if ($usersOwned->getUser() === $this) {
-                $usersOwned->setUser(null);
-            }
-        }
+    // public function removeItemsOwner(Items $itemsOwner): self
+    // {
+    //     if ($this->ItemsOwner->removeElement($itemsOwner)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($itemsOwner->getUser() === $this) {
+    //             $itemsOwner->setUser(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
+
+
 }

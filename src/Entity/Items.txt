@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersOwnedRepository;
+use App\Repository\ItemsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
@@ -10,9 +10,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
      *  items owned by a user
      *
      */
-#[ORM\Entity(repositoryClass: UsersOwnedRepository::class)]
+#[ORM\Entity(repositoryClass: ItemsRepository::class)]
 #[ApiResource]
-class UsersOwned
+class Items
 {
     /**
      *  user id.
@@ -48,7 +48,7 @@ class UsersOwned
      *  which user's property is this item.
      *
      */
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'usersOwneds')]
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'ItemsOwner')]
     private $user;
 
     public function getId(): ?int

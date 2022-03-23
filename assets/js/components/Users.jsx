@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, {Component} from 'react';
+import axios from 'axios';
 
 class Users extends Component {
   constructor() {
-    super();
-    this.state = { users: [] };
+      super();
+      this.state = { users: [], loading: true};
   }
-
+  
   componentDidMount() {
-    this.showUsers();
+      this.getUsers();
   }
-
-  showUsers() {
-    axios.get(`https://127.0.0.1:8000/api/users`).then((users) => {
-      this.setState({ users: users.data });
-    });
+  
+  getUsers() {
+     axios.get(`http://localhost:8000/api/users`).then(users => {
+         this.setState({ users: JSON.parse(users.data), loading: false})
+     })
   }
 
   render() {
@@ -29,12 +29,11 @@ class Users extends Component {
               </h2>
             </div>
             <div>
-              {this.state.users.map((user) => (
-                <div className="col-md-10 offset-md-1 row-block" key={user.id}>
+              { this.state.users.map((user, index) => 
+                <div className="col-md-10 offset-md-1 row-block"  key={index}>
                   <div className="media">
                     <div className="media-body">
-                      <h4>{user.firstName}</h4>
-                      <p>{user.lastName}</p>
+                      <h4>{user.firstName}{" "}{user.lastName}</h4>
                       <p>{user.mail}</p>
                       <p>{user.address}</p>
                       <p>{user.phoneNumber}</p>
@@ -42,7 +41,7 @@ class Users extends Component {
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
@@ -51,3 +50,4 @@ class Users extends Component {
   }
 }
 export default Users;
+

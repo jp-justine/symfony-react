@@ -39,6 +39,9 @@ class Users extends Component {
                       <p>{user.phoneNumber}</p>
                       <p>{user.birthDate}</p>
                     </div>
+                    <div>
+                      <button>Delete</button>
+                    </div>
                   </div>
                 </div>
               )}

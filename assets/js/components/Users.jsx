@@ -1,21 +1,37 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-
+import React, { Component } from "react";
+import axios from "axios";
 class Users extends Component {
-  constructor() {
-      super();
-      this.state = { users: [], loading: true};
+
+  constructor(props) {
+    super(props);
+    this.state = {
+       users: [], loading: true 
+      };
   }
-  
+
   componentDidMount() {
-      this.getUsers();
+    this.getUsers();
   }
-  
+
   getUsers() {
-     axios.get(`http://localhost:8000/api/users`).then(users => {
-         this.setState({ users: JSON.parse(users.data), loading: false})
-     })
+    axios.get(`https://127.0.0.1:8000/api/users`).then((users) => {
+      this.setState({ users: JSON.parse(users.data), loading: false });
+    });
   }
+
+  deleteUserById(id, event) {
+    event.preventDefault();
+    axios.delete(`https://127.0.0.1:8000/api/delete/`+ id).then(res => {
+        this.getUsers();
+        const usersUpdate = this.getState.users.filter(user => user.id !== id);
+        $this.setState({users: usersUpdate});
+    })
+    .catch((error) => {
+        console.log(error.response)
+    });
+}
+
+  
 
   render() {
     const loading = this.state.loading;
@@ -29,22 +45,24 @@ class Users extends Component {
               </h2>
             </div>
             <div>
-              { this.state.users.map((user, index) => 
-                <div className="col-md-10 offset-md-1 row-block"  key={index}>
+              {this.state.users.map((user) => (
+                <div className="col-md-10 offset-md-1 row-block" key={user.id}>
                   <div className="media">
                     <div className="media-body">
-                      <h4>{user.firstName}{" "}{user.lastName}</h4>
+                      <h4>
+                        {user.firstName} {user.lastName}
+                      </h4>
                       <p>{user.mail}</p>
                       <p>{user.address}</p>
                       <p>{user.phoneNumber}</p>
                       <p>{user.birthDate}</p>
                     </div>
                     <div>
-                      <button>Delete</button>
+                      <button onClick={(event) => this.deleteUserById(user.id, event)}>Delete</button>
                     </div>
                   </div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </section>
@@ -53,4 +71,3 @@ class Users extends Component {
   }
 }
 export default Users;
-

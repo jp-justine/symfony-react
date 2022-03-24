@@ -32,14 +32,12 @@ class UsersController extends AbstractController
         return $response;
     }
 
-    #[Route('/delete_user/{id}', name: 'delete')]
+    #[Route('/delete/{id}', name: 'delete')]
     public function deleteUser( Users $user, EntityManagerInterface $em): Response
     {
         
         $em->remove($user);
         $em->flush();
-
-        $this->addFlash('success', 'User was deleted !');
 
         $response = new Response();
 

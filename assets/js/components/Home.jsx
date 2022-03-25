@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch, Link } from "react-router-dom";
 import Users from "./Users";
+import OneUser from "./OneUser";
 
 class Home extends Component {
   render() {
@@ -24,6 +25,7 @@ class Home extends Component {
         </nav>
         <Switch>
           <Route path="/users" component={Users} />
+          <Route path="/user/:id" component={OneUser} />
         </Switch>
       </div>
     );

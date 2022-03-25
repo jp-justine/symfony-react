@@ -44,4 +44,18 @@ class UsersController extends AbstractController
         return $response;
     }
 
+    #[Route('/user/{id}', name: 'userview', methods: 'GET')]
+    public function getOneUser(Users $users, SerializerInterface $serializer, $id)
+    {
+        $jsonContent = $serializer->serialize($users, 'json');
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setContent(json_encode($jsonContent));
+
+        return $response;
+    }
 }

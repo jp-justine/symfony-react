@@ -1,12 +1,13 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 class Users extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-       users: [], loading: true 
-      };
+      users: [],
+      loading: true,
+    };
   }
 
   componentDidMount() {
@@ -21,17 +22,19 @@ class Users extends Component {
 
   deleteUserById(id, event) {
     event.preventDefault();
-    axios.delete(`https://127.0.0.1:8000/api/delete/`+ id).then(res => {
+    axios
+      .delete(`https://127.0.0.1:8000/api/delete/` + id)
+      .then((res) => {
         this.getUsers();
-        const usersUpdate = this.getState.users.filter(user => user.id !== id);
-        $this.setState({users: usersUpdate});
-    })
-    .catch((error) => {
-        console.log(error.response)
-    });
-}
-
-  
+        const usersUpdate = this.getState.users.filter(
+          (user) => user.id !== id
+        );
+        $this.setState({ users: usersUpdate });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
 
   render() {
     const loading = this.state.loading;
@@ -49,16 +52,22 @@ class Users extends Component {
                 <div className="col-md-10 offset-md-1 row-block" key={user.id}>
                   <div className="media">
                     <div className="media-body">
-                      <h4>
-                        {user.firstName} {user.lastName}
-                      </h4>
+                      <Link to={`/user/${user.id}`}>
+                        <h4>
+                          {user.firstName} {user.lastName}
+                        </h4>
+                      </Link>
                       <p>{user.mail}</p>
                       <p>{user.address}</p>
                       <p>{user.phoneNumber}</p>
                       <p>{user.birthDate}</p>
                     </div>
                     <div>
-                      <button onClick={(event) => this.deleteUserById(user.id, event)}>Delete</button>
+                      <button
+                        onClick={(event) => this.deleteUserById(user.id, event)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </div>

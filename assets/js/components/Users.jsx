@@ -58,9 +58,9 @@ class Users extends Component {
                         </h4>
                       </Link>
                       <p>{user.mail}</p>
-                      <p>{user.address}</p>
+                      {/* <p>{user.address}</p>
                       <p>{user.phoneNumber}</p>
-                      <p>{user.birthDate}</p>
+                      <p>{user.birthDate}</p> */}
                     </div>
                     <div>
                       <button

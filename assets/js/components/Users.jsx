@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+
 class Users extends Component {
   constructor(props) {
     super(props);
@@ -58,9 +59,6 @@ class Users extends Component {
                         </h4>
                       </Link>
                       <p>{user.mail}</p>
-                      {/* <p>{user.address}</p>
-                      <p>{user.phoneNumber}</p>
-                      <p>{user.birthDate}</p> */}
                     </div>
                     <div>
                       <button

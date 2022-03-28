@@ -11,9 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 
-     /**
-     *  @Route("/api", name = "api")
-     */
+#[Route('/api', name: 'api_')]
 class UsersController extends AbstractController
 {
 

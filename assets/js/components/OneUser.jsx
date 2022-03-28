@@ -8,19 +8,21 @@ function OneUser() {
   let poss = [];
 
   useEffect(() => {
-    axios.get(`https://127.0.0.1:8000/api/user/` + id).then((res) => {
+    axios.get(`https://127.0.0.1:8000/api/user/`+ id).then((res) => {
       setUser(JSON.parse(res.data));
       poss = res.data.possessions;
     });
   }, []);
 
+
+  
   return (
     <div>
       <section className="row-section">
         <div className="container">
           <div className="row">
             <h2 className="text-center">
-              <span>List of users</span>
+              <span></span>
             </h2>
           </div>
           <div>

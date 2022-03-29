@@ -3,90 +3,62 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
-// use Doctrine\Common\Collections\ArrayCollection;
-// use Doctrine\Common\Collections\Collection;
+use App\Entity\Items;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-// use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-/**
- * a user.
- *
- */
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-// #[ApiResource]
 class Users
 {
-    /**
-     *  user id.
-     *
-     */
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     *  frst name of the user.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     private $firstName;
 
-    /**
-     *   last name of the user.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     private $lastName;
 
-    /**
-     *  email of the user.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     private $mail;
 
-    /**
-     * address of the user.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     private $address;
 
-    /**
-     *  phone number of the user.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     private $phoneNumber;
 
-    /**
-     * bitrhday of the user.
-     *
-     */
+    
     #[ORM\Column(type: "datetime")]
     #[Assert\NotNull]
     private $birthDate;
 
-    // // /**
-    // //  *  items owned by this user.
-    // //  *
-    // //  */
-    // // #[ORM\OneToMany(mappedBy: 'Users', targetEntity: Items::class)]
-    // // private $ItemsOwner;
+    #[ORM\OneToMany(mappedBy: 'itemOwner', targetEntity: Items::class)]
+    private $items;
 
-    // public function __construct()
-    // {
-    //     $this->itemsOwner = new ArrayCollection();
-    //     $this->ItemsOwner = new ArrayCollection();
-    // }
+
+    
+    public function __construct()
+    {
+        $this->itemsOwner = new ArrayCollection();
+        $this->ItemsOwner = new ArrayCollection();
+        $this->items = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -165,35 +137,35 @@ class Users
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, Items>
-    //  */
-    // public function getItemsOwner(): Collection
-    // {
-    //     return $this->ItemsOwner;
-    // }
+    /**
+     * @return Collection<int, Items>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
 
-    // public function addItemsOwner(Items $itemsOwner): self
-    // {
-    //     if (!$this->ItemsOwner->contains($itemsOwner)) {
-    //         $this->ItemsOwner[] = $itemsOwner;
-    //         $itemsOwner->setUser($this);
-    //     }
+    public function addItem(Items $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setItemOwner($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeItemsOwner(Items $itemsOwner): self
-    // {
-    //     if ($this->ItemsOwner->removeElement($itemsOwner)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($itemsOwner->getUser() === $this) {
-    //             $itemsOwner->setUser(null);
-    //         }
-    //     }
+    public function removeItem(Items $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getItemOwner() === $this) {
+                $item->setItemOwner(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-
+    
 }

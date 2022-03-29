@@ -183,7 +183,7 @@ class UsersFixtures extends Fixture
         );
       $manager->persist($user);
     }
-
+    $this->addReference("user_user", $user);
     $manager->flush();
   }
 }

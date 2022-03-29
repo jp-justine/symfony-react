@@ -4,52 +4,31 @@ namespace App\Entity;
 
 use App\Repository\ItemsRepository;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
 
-    /**
-     *  items owned by a user
-     *
-     */
+    
 #[ORM\Entity(repositoryClass: ItemsRepository::class)]
-#[ApiResource]
 class Items
 {
-    /**
-     *  user id.
-     *
-     */
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     *  item name.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     *  item value.
-     *
-     */
+    
     #[ORM\Column(type: 'float')]
     private $value;
 
-    /**
-     *  item type.
-     *
-     */
+    
     #[ORM\Column(type: 'string', length: 255)]
     private $type;
 
-    /**
-     *  which user's property is this item.
-     *
-     */
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'ItemsOwner')]
-    private $user;
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'items')]
+    private $itemOwner;
 
     public function getId(): ?int
     {
@@ -92,15 +71,17 @@ class Items
         return $this;
     }
 
-    public function getUser(): ?Users
+    public function getItemOwner(): ?Users
     {
-        return $this->user;
+        return $this->itemOwner;
     }
 
-    public function setUser(?Users $user): self
+    public function setItemOwner(?Users $itemOwner): self
     {
-        $this->user = $user;
+        $this->itemOwner = $itemOwner;
 
         return $this;
     }
+
+    
 }

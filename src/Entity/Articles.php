@@ -2,33 +2,39 @@
 
 namespace App\Entity;
 
-use App\Repository\ItemsRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\ArticlesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-    
-#[ORM\Entity(repositoryClass: ItemsRepository::class)]
-class Items
+#[ORM\Entity(repositoryClass: ArticlesRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['article : read']],
+    denormalizationContext: ['groups' => ['article : write']],
+)]
+class Articles
 {
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(["article : read", "user : read"])]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["article : read", "article : write", "user : read"])]
     private $name;
 
-    
     #[ORM\Column(type: 'float')]
+    #[Groups(["article : read", "article : write", "user : read"])]
     private $value;
 
-    
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["article : read", "article : write", "user : read"])]
     private $type;
 
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'items')]
-    private $itemOwner;
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'articles')]
+    #[Groups([ "article : write"])]
+    private Users $user;
 
     public function getId(): ?int
     {
@@ -71,17 +77,15 @@ class Items
         return $this;
     }
 
-    public function getItemOwner(): ?Users
+    public function getUser(): ?Users
     {
-        return $this->itemOwner;
+        return $this->user;
     }
 
-    public function setItemOwner(?Users $itemOwner): self
+    public function setUser(?Users $user): self
     {
-        $this->itemOwner = $itemOwner;
+        $this->user = $user;
 
         return $this;
     }
-
-    
 }

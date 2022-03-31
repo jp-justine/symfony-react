@@ -2,62 +2,54 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UsersRepository;
-use App\Entity\Items;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['user : read']],
+    denormalizationContext: ['groups' => ['user : write']],
+)]
 class Users
 {
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["user : read", "user : write"])]
     private $id;
 
-    
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
-    private $firstName;
+    #[Groups(["user : read", "user : write"])]
+    private $name;
 
-    
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
-    private $lastName;
-
-    
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
+    #[Groups(["user : read", "user : write"])]
     private $mail;
 
-    
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
+    #[Groups(["user : read", "user : write"])]
     private $address;
 
-    
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
-    private $phoneNumber;
+    #[Groups(["user : read", "user : write"])]
+    private $phone;
 
-    
-    #[ORM\Column(type: "datetime")]
-    #[Assert\NotNull]
-    private $birthDate;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Articles::class, orphanRemoval: true)]
+    #[Groups(["user : read", "user : write"])]
+    #[ApiSubresource]
+    private $articles;
 
-    #[ORM\OneToMany(mappedBy: 'itemOwner', targetEntity: Items::class)]
-    private $items;
+    #[ORM\Column(type: 'date')]
+    private $birthdate;
 
-
-    
     public function __construct()
     {
-        $this->itemsOwner = new ArrayCollection();
-        $this->ItemsOwner = new ArrayCollection();
-        $this->items = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,26 +57,14 @@ class Users
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getName(): ?string
     {
-        return $this->firstName;
+        return $this->name;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setName(string $name): self
     {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
+        $this->name = $name;
 
         return $this;
     }
@@ -113,59 +93,58 @@ class Users
         return $this;
     }
 
-    public function getPhoneNumber(): ?string
+    public function getPhone(): ?string
     {
-        return $this->phoneNumber;
+        return $this->phone;
     }
 
-    public function setPhoneNumber(string $phoneNumber): self
+    public function setPhone(string $phone): self
     {
-        $this->phoneNumber = $phoneNumber;
-
-        return $this;
-    }
-
-    public function getBirthDate(): ?\DateTimeInterface
-    {
-        return $this->birthDate;
-    }
-
-    public function setBirthDate(\DateTimeInterface $birthDate): self
-    {
-        $this->birthDate = $birthDate;
+        $this->phone = $phone;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Items>
+     * @return Collection|Articles[]
      */
-    public function getItems(): Collection
+    public function getArticles(): Collection
     {
-        return $this->items;
+        return $this->articles;
     }
 
-    public function addItem(Items $item): self
+    public function addArticle(Articles $article): self
     {
-        if (!$this->items->contains($item)) {
-            $this->items[] = $item;
-            $item->setItemOwner($this);
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeItem(Items $item): self
+    public function removeArticle(Articles $article): self
     {
-        if ($this->items->removeElement($item)) {
+        if ($this->articles->removeElement($article)) {
             // set the owning side to null (unless already changed)
-            if ($item->getItemOwner() === $this) {
-                $item->setItemOwner(null);
+            if ($article->getUser() === $this) {
+                $article->setUser(null);
             }
         }
 
         return $this;
     }
 
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
+
+        return $this;
+    }
     
 }

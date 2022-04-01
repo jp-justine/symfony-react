@@ -19,7 +19,24 @@ class UsersController extends AbstractController
     public function getUsers(UsersRepository $usersRepository, SerializerInterface $serializer)
     {
         $users = $usersRepository->findAll();
+        $jsonContent = $serializer->serialize($users, 'json', ['groups' => 'user : read', 'user : write']);
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setContent(json_encode($jsonContent));
+
+        return $response;
+        
+    }
+  
+    #[Route('/user/{id}', name: 'userview', methods: 'GET')]
+    public function getOneUser(Users $users, SerializerInterface $serializer, $id)
+    {
         $jsonContent = $serializer->serialize($users, 'json');
+
         $response = new Response();
 
         $response->headers->set('Content-Type', 'application/json');
@@ -38,21 +55,6 @@ class UsersController extends AbstractController
         $em->flush();
 
         $response = new Response();
-
-        return $response;
-    }
-
-    #[Route('/user/{id}', name: 'userview', methods: 'GET')]
-    public function getOneUser(Users $users, SerializerInterface $serializer, $id)
-    {
-        $jsonContent = $serializer->serialize($users, 'json');
-
-        $response = new Response();
-
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        $response->setContent(json_encode($jsonContent));
 
         return $response;
     }

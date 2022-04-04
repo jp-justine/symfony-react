@@ -2,50 +2,44 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UsersRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['user : read']],
-    denormalizationContext: ['groups' => ['user : write']],
-)]
 class Users
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["user : read", "user : write"])]
+    #[Groups("user:read")]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["user : read", "user : write"])]
+    #[ORM\Column(type: 'string', length: 40)]
+    #[Groups("user:read")]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["user : read", "user : write"])]
+    #[ORM\Column(type: 'string', length: 40)]
+    #[Groups("user:read")]
     private $mail;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["user : read", "user : write"])]
+    #[ORM\Column(type: 'string', length: 40)]
+    #[Groups("user:read")]
     private $address;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["user : read", "user : write"])]
+    #[ORM\Column(type: 'string', length: 40)]
+    #[Groups("user:read")]
     private $phone;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Articles::class, orphanRemoval: true)]
-    #[Groups(["user : read", "user : write"])]
-    #[ApiSubresource]
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Articles::class, orphanRemoval:true)]
+    #[Groups("user:read")]
     private $articles;
 
-    #[ORM\Column(type: 'date')]
-    private $birthdate;
+    #[ORM\Column(type: 'datetime')]
+    #[Groups("user:read")]
+    private $birthDate;
 
     public function __construct()
     {
@@ -106,45 +100,44 @@ class Users
     }
 
     /**
-     * @return Collection|Articles[]
+     * @return Collection<int, Articles>
      */
-    public function getArticles(): Collection
+    public function getArticless(): Collection
     {
         return $this->articles;
     }
 
-    public function addArticle(Articles $article): self
+    public function addArticles(Articles $articles): self
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->setUser($this);
+        if (!$this->articles->contains($articles)) {
+            $this->articles[] = $articles;
+            $articles->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeArticle(Articles $article): self
+    public function removeArticles(Articles $articles): self
     {
-        if ($this->articles->removeElement($article)) {
+        if ($this->articles->removeElement($articles)) {
             // set the owning side to null (unless already changed)
-            if ($article->getUser() === $this) {
-                $article->setUser(null);
+            if ($articles->getUser() === $this) {
+                $articles->setUser(null);
             }
         }
 
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthDate(): ?\DateTimeInterface
     {
-        return $this->birthdate;
+        return $this->birthDate;
     }
 
-    public function setBirthdate(\DateTimeInterface $birthdate): self
+    public function setBirthDate(\DateTimeInterface $birthDate): self
     {
-        $this->birthdate = $birthdate;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
-    
 }

@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\Users;
 use DateTime;
 
@@ -164,4 +163,3 @@ class UsersFixtures extends Fixture
     $manager->flush();
   }
 }
-// 

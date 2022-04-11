@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Users;
 use App\Entity\Articles;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -62,7 +61,7 @@ class ArticlesFixtures extends Fixture implements DependentFixtureInterface
               $article->setName($data['name']);
               $article->setValue($data['value']);
               $article->setType($data['type']);
-              $article->setUser($this->getReference('user_' . $x));
+              $article->setUsers($this->getReference('user_' . $x));
 
               $manager->persist($article);
           }

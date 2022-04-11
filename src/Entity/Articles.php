@@ -12,22 +12,22 @@ class Articles
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'possessions')]
-    private $user;
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'articles')]
+    private $users;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $name;
 
     #[ORM\Column(type: 'float')]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $value;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $type;
 
     public function getId(): ?int
@@ -35,14 +35,14 @@ class Articles
         return $this->id;
     }
 
-    public function getUser(): ?Users
+    public function getUsers(): ?Users
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(?Users $user): self
+    public function setUsers(?Users $users): self
     {
-        $this->user = $user;
+        $this->users = $users;
 
         return $this;
     }

@@ -1,76 +1,83 @@
-import React, { Component} from "react";
+import React, {Component} from 'react';
+import axios from 'axios';
 import {
-  Link
+    Link
 } from 'react-router-dom';
-import axios from "axios";
-export default class  UsersList extends Component {
-  
-constructor() {
-  super();
-  this.state = {
-     users: [], 
-     loading: true 
-    };
-}
 
-componentDidMount() {
-  this.getUsers();
-}
+import {  Button } from 'react-bootstrap';
 
-getUsers() {
-  axios.get(`https://127.0.0.1:8000/api/users`).then(users => {
-    this.setState({ users: users.data, loading: false})
-})
-}
+export default class UsersList extends Component {
+    constructor() {
+        super();
+        this.state ={ users: [], loading: true, };
+    }
 
-deleteUserById(id, event) {
-  event.preventDefault();
-  axios.delete(`https://127.0.0.1:8000/api/users/delete/`+ id).then(res => {
-      this.getUsers();
-      const usersUpdate = this.getState.users.filter(user => user.id !== id);
-      $this.setState({users: usersUpdate});
-  })
-  .catch((error) => {
-      console.log(error.response)
-  });
-}
+    componentDidMount() {
+        this.getUsers();
+    }
 
+    getUsers() {
+        axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+        axios.get(`/api/users`).then(users => {
+            this.setState({ users: users.data, loading: false})
+        })
+        .catch((error) => {
+            console.log(error.response)
+        });
+    }
 
+    deleteUserById(id, event) {
+        event.preventDefault();
+        axios.delete(`api/users/delete/`+ id).then(res => {
+            this.getUsers();
+            const usersUpdate = this.getState.users.filter(user => user.id !== id);
+            $this.setState({users: usersUpdate});
+        })
+        .catch((error) => {
+            console.log(error.response)
+        });
+    }
+    
 
-render() {
-  const loading = this.state.loading;
-  return (
-    <div>
-      <section className="row-section">
-        <div className="container">
-          <div className="row">
-            <h2 className="text-center">
-              <span>List of users</span>
-            </h2>
-          </div>
-          <div>
-            {this.state.users.map((user) => (
-              <div className="col-md-10 offset-md-1 row-block" key={user.id}>
-                <div className="media">
-                  <div className="media-body">
-                    <h4>
-                    <Link className={"link"} to={`/users/${user.id}`}>{user.name}</Link>
-                    </h4>
-                    <p>{user.mail}</p>
-                    <p>{user.address}</p>
-                    <p>{user.phoneNumber}</p>
-                    <p>{user.birthDate}</p>
-                  </div>
-                  <div>
-                    <button onClick={(event) => this.deleteUserById(user.id, event)}>Delete</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
+    render() {
+        const loading = this.state.loading;
+
+        return (
+            <div>
+                <section className="row-section">
+                    <div className="container">
+                        <div className="row">
+                            <h2 className="text-center"><span>List of users</span></h2>
+                        </div>
+                        {loading ? (
+                            <div className={'row text-center'}>
+                                <span className="fa fa-spin fa-spinner fa-4x"></span>
+                            </div>
+                        ) : (
+                            <div className={'row'}>
+                                {this.state.users.map(user =>
+                                    <div className="col-md-10 offset-md-1 row-block" key={user.id}>
+                                        <ul id="sortable">
+                                            <li>
+                                            <div className="media">
+                                                <div className="media-body">
+                                                    <h4><Link  to={`/user/${user.id}`}> {user.name}</Link></h4>                                                    
+                                                    <p>Email : {user.mail}</p>
+                                                </div>
+                                                <div>
+                                                    <Button as="input" type="reset" value="Delete" onClick={(event) => this.deleteUserById(user.id, event)}></Button>
+                                                </div>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </section>
+            </div>
+        )
+    }
 }

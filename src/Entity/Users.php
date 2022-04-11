@@ -14,31 +14,31 @@ class Users
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $id;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $name;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $mail;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $address;
 
     #[ORM\Column(type: 'string', length: 40)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $phone;
 
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Articles::class, orphanRemoval:true)]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $articles;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups("user:read")]
+    #[Groups("read")]
     private $birthDate;
 
     public function __construct()
@@ -102,7 +102,7 @@ class Users
     /**
      * @return Collection<int, Articles>
      */
-    public function getArticless(): Collection
+    public function getArticles(): Collection
     {
         return $this->articles;
     }
@@ -111,7 +111,7 @@ class Users
     {
         if (!$this->articles->contains($articles)) {
             $this->articles[] = $articles;
-            $articles->setUser($this);
+            $articles->setUsers($this);
         }
 
         return $this;
@@ -121,8 +121,8 @@ class Users
     {
         if ($this->articles->removeElement($articles)) {
             // set the owning side to null (unless already changed)
-            if ($articles->getUser() === $this) {
-                $articles->setUser(null);
+            if ($articles->getUsers() === $this) {
+                $articles->setUsers(null);
             }
         }
 

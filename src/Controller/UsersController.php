@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 
 class UsersController extends AbstractController
@@ -40,16 +42,30 @@ class UsersController extends AbstractController
 
     }
     #[Route('/api/new', name: 'new', methods: ['POST'])]
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): Response
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
         $jsonResponse = $request->getContent();
 
+        try {
             $user = $serializer->deserialize($jsonResponse,
             Users::class, 'json');
+
+            $errors = $validator->validate($user);
+
+            if(count($errors) > 0) {
+                return $this->json($errors, 400);
+            }
 
             $em->persist($user);
             $em->flush();
 
             return $this->json($user, 201, [], ['groups' => 'read']);
+
+        } catch (NotEncodableValueException $e) {
+            return $this->json([
+                'status' => 400,
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
 }

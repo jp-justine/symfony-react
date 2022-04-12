@@ -59,7 +59,7 @@ export default class UsersList extends Component {
                             </div>
                         ) : (
                             <div className={'row'}>
-                                <Button  onClick={() => this.changeModalShow(true)}>
+                                <Button  variant="primary" onClick={() => this.changeModalShow(true)}>
                                     Add New User
                                 </Button>
                                 {this.state.users.map(user =>

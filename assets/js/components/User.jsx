@@ -22,6 +22,9 @@ export default function User() {
         <div>
             <section className="row-section">
                 <div className="container">
+                <div className="row">
+                            <h2 className="text-center"><span>{user.name} informations</span></h2>
+                        </div>
                     <div className={'row'}>
                         <div className="col-md-10 offset-md-1 row-block" >
                             <ul id="sortable">
@@ -40,7 +43,7 @@ export default function User() {
                         </div>
                     </div>
                     <div className="row">
-                        <h2 className="text-center"><span>Articles</span></h2>
+                        <h2 className="text-center"><span>Articles of {user.name} </span></h2>
                     </div>
                     <div className={'row'}>
                         {articles.map(article =>

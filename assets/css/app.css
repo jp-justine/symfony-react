@@ -77,6 +77,7 @@
 .fa-spin {
   margin: 0 auto;
 }
-.btn-primary {
-  margin: auto;
+.modal-body {
+  display: flex;
+  flex-direction: column;
 }

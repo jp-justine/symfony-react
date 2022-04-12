@@ -28,7 +28,7 @@
 .row-section .row-block {
   background: #fff;
   padding: 20px;
-  margin-bottom: 50px;
+  margin-top: 15px;
 }
 .row-section .row-block ul {
   margin: 0;
@@ -50,6 +50,7 @@
   border-radius: 5px;
   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.04);
   background: #fff;
+  align-items: baseline;
 }
 .row-section .media .media-left img {
   width: 75px;
@@ -72,12 +73,10 @@
   border: none;
   font-size: 16px;
 }
+
 .fa-spin {
   margin: 0 auto;
 }
-body {
-  background-color: lightgray;
-}
-a{
-  color:#6b456a;
+.btn-primary {
+  margin: auto;
 }

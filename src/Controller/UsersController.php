@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -38,5 +39,17 @@ class UsersController extends AbstractController
         return $this->json($user, 200,[], ['groups' => 'read']);
 
     }
+    #[Route('/api/new', name: 'new', methods: ['POST'])]
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): Response
+    {
+        $jsonResponse = $request->getContent();
 
+            $user = $serializer->deserialize($jsonResponse,
+            Users::class, 'json');
+
+            $em->persist($user);
+            $em->flush();
+
+            return $this->json($user, 201, [], ['groups' => 'read']);
+    }
 }

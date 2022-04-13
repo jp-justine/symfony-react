@@ -41,6 +41,7 @@ class UsersController extends AbstractController
         return $this->json($user, 200,[], ['groups' => 'read']);
 
     }
+    
     #[Route('/api/new', name: 'new', methods: ['POST'])]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
